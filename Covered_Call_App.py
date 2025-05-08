@@ -21,9 +21,7 @@ param_tab, weight_tab, multi_tab = tabs
 # --- Parameters Tab ---
 with param_tab:
     st.header("🔧 Parameters")
-    ticker_input = st.text_input("Ticker Symbol", "AAPL").strip().upper()
-    # Ensure ticker is uppercase
-    ticker_input = ticker_input.upper()
+    ticker_input = st.text_input("Ticker Symbol", "AAPL")
     purchase_price = st.number_input("Purchase Price (optional)", min_value=0.0, step=0.01, value=0.0)
     basis_price = purchase_price if purchase_price > 0 else None
     target_roi_input = st.number_input("Target ROI (%) (optional)", min_value=0.0, step=0.1, value=0.0)
@@ -114,9 +112,6 @@ for exp in ticker.options:
             if not include_itm and K <= stock_price:
                 continue
             sigma = row.get('impliedVolatility', 0.0)
-            # Skip if implied volatility missing or zero to avoid extreme deltas
-            if not sigma or sigma <= 0:
-                continue
             T = max(dte/365, 0)
             delta = bs_call_delta(stock_price, K, T, r_rate, sigma)
             prob_w = 1 - delta
