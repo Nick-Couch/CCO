@@ -114,6 +114,9 @@ for exp in ticker.options:
             if not include_itm and K <= stock_price:
                 continue
             sigma = row.get('impliedVolatility', 0.0)
+            # Skip if implied volatility missing or zero to avoid extreme deltas
+            if not sigma or sigma <= 0:
+                continue
             T = max(dte/365, 0)
             delta = bs_call_delta(stock_price, K, T, r_rate, sigma)
             prob_w = 1 - delta
